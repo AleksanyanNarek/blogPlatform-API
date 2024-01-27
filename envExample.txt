@@ -1,0 +1,13 @@
+PORT = 8000 // on which port you want to start server
+
+ORIGIN = ['http://localhost:3000'] // your frontend URL
+
+DB_URL = mongodb+srv://narekyan45:aKNjRW4G0CGtZwfO@blog-platform.sc1q8o6.mongodb.net/ // to connect to the MongoDB
+
+JWT_ACCESS_SECRET = 'p_#0BAx~Kx^W%Lzp0OS9rqN.5Lbte_$Ks|h*?,T!f#w9a)J&hf' // for jwt access token
+
+JWT_REFRESH_SECRET = 'J9iCOI1Ym^R.zfub\3N9ty8~`/O&v+S^CKq!Q+8&F_rti~5WJi' // for jwt refresh token
+
+ACCESS_TOKEN_EXPIRE = 15  // how many minutes is a jwt access token valid
+
+REFRESH_TOKEN_EXPIRE = 30 // how many days is a jwt refresh token valid
