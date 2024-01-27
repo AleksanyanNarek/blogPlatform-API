@@ -43,6 +43,31 @@ export const getAllPosts = CatchAsyncError(
     }
 )
 
+export const getOnePost = CatchAsyncError(
+    async (req, res, next) => {
+        try {
+            const { id } = req.params;
+
+            if (!id) {
+                return next(new ErrorHandler("Missing required fields", 400));
+            }
+
+            const post = await PostModel.findById(id);
+
+            if (!post) {
+                return next(new ErrorHandler("Post not found", 404));
+            }
+            
+            res.status(200).json({
+                success: true,
+                post
+            });
+        } catch (error) {
+            return next(new ErrorHandler(error.message, 500));
+        }
+    }
+)
+
 export const updatePost = CatchAsyncError(
     async (req, res, next) => {
         try {
@@ -57,7 +82,7 @@ export const updatePost = CatchAsyncError(
             const updatedPost = await PostModel.findOneAndUpdate(filter, { title, body }, { new: true });
 
             if (!updatedPost) {
-                return next(new ErrorHandler("You don't have post like this", 400));
+                return next(new ErrorHandler("You don't have post like this", 404));
             }
             
             res.status(200).json({
@@ -85,7 +110,7 @@ export const deletePost = CatchAsyncError(
             const deletedPost = await PostModel.findOneAndDelete(filter);
             
             if (!deletedPost) {
-                return next(new ErrorHandler("You don't have post like this", 400));
+                return next(new ErrorHandler("You don't have post like this", 404));
             }
 
             await CommentModel.deleteMany({ post: id });
@@ -93,31 +118,6 @@ export const deletePost = CatchAsyncError(
             res.status(200).json({
                 success: true,
                 post: deletedPost
-            });
-        } catch (error) {
-            return next(new ErrorHandler(error.message, 500));
-        }
-    }
-)
-
-export const getOnePost = CatchAsyncError(
-    async (req, res, next) => {
-        try {
-            const { id } = req.params;
-
-            if (!id) {
-                return next(new ErrorHandler("Missing required fields", 400));
-            }
-
-            const post = await PostModel.findById(id);
-
-            if (!post) {
-                return next(new ErrorHandler("No post found", 400));
-            }
-            
-            res.status(200).json({
-                success: true,
-                post
             });
         } catch (error) {
             return next(new ErrorHandler(error.message, 500));

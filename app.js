@@ -1,14 +1,17 @@
 import dotenv from 'dotenv';
 dotenv.config();
-
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import express from 'express';
+import swaggerUi from 'swagger-ui-express';
+import swaggerSpec from './swagger.js';
 
 import { ErrorMiddleware } from './middleware/error.js';
 import router from './routes/index.js';
 
 export const app = express();
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 //body parser
 app.use(express.json({limit: "50mb"}));

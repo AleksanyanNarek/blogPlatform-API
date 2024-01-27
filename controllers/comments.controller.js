@@ -17,7 +17,7 @@ export const writeComment = CatchAsyncError(
 
             const post = await PostModel.findById(postId);
             if (!post) {
-                return next(new ErrorHandler("Incorrect post id", 400));
+                return next(new ErrorHandler("Post not found", 404));
             }
 
             const comment = await CommentModel.create({ post: postId, userName: user.userName, message });
@@ -43,7 +43,7 @@ export const getPostAllComments = CatchAsyncError(
 
             const post = await PostModel.findById(postId);
             if (!post) {
-                return next(new ErrorHandler("Incorrect post id", 400));
+                return next(new ErrorHandler("Post not found", 404));
             }
 
             const comments = await CommentModel.find({ post: postId }) || [];
@@ -73,12 +73,12 @@ export const deleteComment = CatchAsyncError(
             const deletedComment = await CommentModel.findOneAndDelete(filter);
             
             if (!deletedComment) {
-                return next(new ErrorHandler("You don't have comment like this", 400));
+                return next(new ErrorHandler("Comment not found", 404));
             }
             
             res.status(200).json({
                 success: true,
-                deletedComment
+                comment: deletedComment
             });
         } catch (error) {
             return next(new ErrorHandler(error.message, 500));
